@@ -7,7 +7,6 @@
 
 package com.github.danrosher.solr.search.function.distance;
 
-import com.github.danrosher.solr.util.NVectorUtil;
 import org.apache.lucene.index.LeafReaderContext;
 import org.apache.lucene.queries.function.FunctionValues;
 import org.apache.lucene.queries.function.ValueSource;
@@ -50,7 +49,7 @@ public class NVector extends ValueSource {
                 double[] dv2 = new double[p2.dimension()];
                 vals1.doubleVal(doc, dv1);
                 vals2.doubleVal(doc, dv2);
-                return  NVectorUtil.NVectorDist(dv1, dv2, radius);
+                return  NVectorDist(dv1, dv2, radius);
             }
 
             @Override

@@ -74,9 +74,11 @@ public class NVectorDistTest extends SolrTestCaseJ4 {
             "lat","52.01966071979866",
             "lon","-0.4983083573742952",
             "dist","nvdist($lat,$lon,nvector)",
-            "q", "{!frange u=30}$dist",
+            "q","*:*",
+            "fq", "{!frange u=30}$dist",
             "fl", "*,dist:$dist",
-            "sort","$dist asc"),
+            "sort","$dist asc"
+            ),
             "/response/numFound==2",
             "/response/docs/[0]/id=='0'",
             "/response/docs/[0]/dist==0.7706622667641961",
