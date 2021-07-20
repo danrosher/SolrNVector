@@ -1,0 +1,58 @@
+package com.github.danrosher.solr.util;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import java.util.Random;
+
+import static com.github.danrosher.solr.util.NVectorUtil.EARTH_RADIUS;
+import static org.junit.Assert.assertTrue;
+
+public class FastInvTrigTest {
+
+    final static int num_points = 100000;
+    final static double EPSILON = 0.0001;
+    static final Random r = new Random();
+    private static final double TEN_METERS = 0.01;
+
+    static double[][] points = new double[num_points][2];
+
+    @BeforeAll
+    static void initAll() {
+        for (int i = 0; i < num_points; i++) {
+            points[i] = generateRandomPoint();
+        }
+    }
+
+    public static double deg2rad(double deg) {
+        return deg * (Math.PI / 180);
+    }
+
+    public static double[] generateRandomPoint() {
+        double u = r.nextDouble();
+        double v = r.nextDouble();
+
+        double latitude = deg2rad(Math.toDegrees(Math.acos(u * 2 - 1)) - 90);
+        double longitude = deg2rad(360 * v - 180);
+        return new double[]{latitude, longitude};
+    }
+
+    @Test
+    void acos() {
+        for (double i = -1; i <= 1; i = i + 0.00001) {
+            assertTrue(FastInvTrig.acos(i) - Math.acos(i) <= EPSILON);
+        }
+    }
+
+    @Test
+    public void dist() {
+        double[] a = NVectorUtil.latLongToNVector(52.02456414691066, -0.49013542948214134);
+
+        for (int i = 0; i < num_points; i++) {
+            double[] b = NVectorUtil.latLongToNVector(points[i][0], points[i][1]);
+            double d1 = EARTH_RADIUS * FastInvTrig.acos(a[0] * b[0] + a[1] * b[1] + a[2] * b[2]);
+            double d2 = EARTH_RADIUS * Math.acos(a[0] * b[0] + a[1] * b[1] + a[2] * b[2]);
+            assertTrue(Math.abs(d1 - d2) <= TEN_METERS);
+        }
+    }
+}

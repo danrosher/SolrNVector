@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
+group 'com.github.danrosher'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -10,5 +10,23 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    testImplementation "org.junit.jupiter:junit-jupiter-params:5.7.1"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.7.1"
+
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:5.7.1"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.1"
+
+    compile 'org.apache.solr:solr-core:8.9.0'
+    compile 'org.apache.solr:solr-test-framework:8.9.0'
+
+}
+
+test {
+    useJUnitPlatform {
+        includeEngines 'junit-jupiter', 'junit-vintage'
+    }
+    test {
+        systemProperty 'test.solr.allowed.securerandom', 'NativePRNG'
+    }
 }
