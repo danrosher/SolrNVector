@@ -55,5 +55,33 @@ public class NVectorDistTest extends SolrTestCaseJ4 {
             "/response/docs/[1]/id=='1'",
             "/response/docs/[1]/dist==22.939789336475414"
             );
+
+        assertJQ(req(
+            "defType", "lucene",
+            "dist","nvdist(52.01966071979866, -0.4983083573742952,nvector)",
+            "q", "{!frange u=30}$dist",
+            "fl", "*,dist:$dist",
+            "sort","$dist asc"),
+            "/response/numFound==2",
+            "/response/docs/[0]/id=='0'",
+            "/response/docs/[0]/dist==0.7706622667641961",
+            "/response/docs/[1]/id=='1'",
+            "/response/docs/[1]/dist==22.939789336475414"
+        );
+
+        assertJQ(req(
+            "defType", "lucene",
+            "lat","52.01966071979866",
+            "lon","-0.4983083573742952",
+            "dist","nvdist($lat,$lon,nvector)",
+            "q", "{!frange u=30}$dist",
+            "fl", "*,dist:$dist",
+            "sort","$dist asc"),
+            "/response/numFound==2",
+            "/response/docs/[0]/id=='0'",
+            "/response/docs/[0]/dist==0.7706622667641961",
+            "/response/docs/[1]/id=='1'",
+            "/response/docs/[1]/dist==22.939789336475414"
+        );
     }
 }
