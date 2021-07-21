@@ -36,12 +36,10 @@ public class NVectorUtil {
     }
 
     public static double[] NVectorToLatLong(String[] n) {
-        return NVectorToLatLong(
-            Arrays
-                .stream(n)
-                .mapToDouble(Double::valueOf)
-                .toArray()
-        );
+        return NVectorToLatLong(new double[]{
+            Double.parseDouble(n[0]),
+            Double.parseDouble(n[1]),
+            Double.parseDouble(n[2])});
     }
 
     public static double NVectorDist(double[] a, double[] b) {
